@@ -31,23 +31,23 @@ namespace RestfulRouting.Documentation.Controllers.Mappings {
             };
 
             return RespondTo(format => {
-                format.Default = RedirectToAction("show");
-                format.Json = () => {
+                format.Any(() => RedirectToAction("show"));
+                format.Json(() => {
                     model.id = "awesome_json";
                     return Json(model, JsonRequestBehavior.AllowGet);
-                };
-                format.Xml = () => {
+                });
+                format.Xml(() => {
                     model.id = "awesome_xml";
                     return Xml(model);
-                };
-                format["yml"] = () => {
+                });
+                format.Mime("yml", () => {
                     model.id = "awesome_yml";
                     return View("awesome.yml", model);
-                };
-                format.Html = () => {
+                });
+                format.Html(() => {
                     Flash.Success("Nothing to see here");
                     return RedirectToAction("show");
-                };
+                });
             });
         }
     }

@@ -50,11 +50,21 @@ namespace RestfulRouting.Format
 
         public List<MimeType> Parse(string accept)
         {
+            if (string.IsNullOrEmpty(accept))
+            {
+                return Parse(new string[0]);
+            }
+
             return Parse(accept.Split(',').Select(x => x.Trim()).ToArray());
         }
 
         public List<MimeType> Parse(params string[] acceptTypes)
         {
+            if (acceptTypes == null || acceptTypes.Length < 1)
+            {
+                return new List<MimeType> { _all };
+            }
+
             var acceptList = new AcceptList(this, acceptTypes);
             return acceptList.Parse();
         }

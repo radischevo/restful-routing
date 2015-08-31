@@ -4,12 +4,16 @@ using System.Text;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Serialization;
+
 using RestfulRouting.Format;
 
 namespace RestfulRouting.Documentation.Controllers {
     public abstract class ApplicationController : Controller {
-        protected ActionResult RespondTo(Action<FormatCollection> format) {
-            return new FormatResult(format);
+        protected ActionResult RespondTo(Action<MultiMimeFormat> format) {
+            var setup = new MultiMimeFormat();
+            format(setup);
+
+            return new RespondToResult(setup);
         }
 
         public ActionResult Xml<T>(T model) {

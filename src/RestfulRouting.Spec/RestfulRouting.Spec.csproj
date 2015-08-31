@@ -63,8 +63,6 @@
     <Compile Include="AdditionalActionSpec.cs" />
     <Compile Include="Format\FormatResultSpec.cs" />
     <Compile Include="Format\MimeTypeSpec.cs" />
-    <Compile Include="Format\ResultExposal\When_ExposeActionResult_method_called_on_format_result.cs" />
-    <Compile Include="Format\ResultExposal\When_format_collection_has_no_appropriate_action_registered.cs" />
     <Compile Include="InflectorSpec.cs" />
     <Compile Include="MapperSpec.cs" />
     <Compile Include="Mappers\AreaMapperSpec.cs" />
