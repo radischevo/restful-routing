@@ -12,6 +12,7 @@ namespace RestfulRouting
             : base(allowedMethods)
         {
         }
+
         protected override bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
             switch (routeDirection)
@@ -35,7 +36,7 @@ namespace RestfulRouting
                         if (form == null)
                             continue;
 
-                        var overridden = form["_method"] ?? form["X-HTTP-Method-Override"];
+                        var overridden = form["X-HTTP-Method-Override"];
                         if (String.Equals(method, overridden, StringComparison.OrdinalIgnoreCase))
                         {
                             return true;
@@ -47,6 +48,5 @@ namespace RestfulRouting
 
             return base.Match(httpContext, route, parameterName, values, routeDirection);
         }
-
     }
 }

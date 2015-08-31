@@ -13,7 +13,7 @@ namespace RestfulRouting.Mappers
 
         public override void RegisterRoutes(RouteCollection routeCollection)
         {
-            routeCollection.Add(_routeBase);
+            AppendRouteTo(routeCollection, _routeBase);
         }
     }
 }

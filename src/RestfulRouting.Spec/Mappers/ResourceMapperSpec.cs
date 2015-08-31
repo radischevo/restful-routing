@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
+
 using Machine.Specifications;
+
 using MvcContrib.TestHelper;
+
 using RestfulRouting.Mappers;
 using RestfulRouting.Spec.TestObjects;
 
@@ -15,13 +18,13 @@ namespace RestfulRouting.Spec.Mappers
 
         It should_map_get_new = () => "~/session/new".WithMethod(HttpVerbs.Get).ShouldMapTo<SessionsController>(x => x.New()).WithName("new_session");
 
-        It should_map_post_create = () => "~/session".WithMethod(HttpVerbs.Post).ShouldMapTo<SessionsController>(x => x.Create());
+        It should_map_post_create = () => "~/session".WithMethod(HttpVerbs.Post).ShouldMapTo<SessionsController>(x => x.Create()).WithName("create_session");
 
         It should_map_get_edit = () => "~/session/edit".WithMethod(HttpVerbs.Get).ShouldMapTo<SessionsController>(x => x.Edit()).WithName("edit_session");
 
-        It should_map_put_update = () => "~/session".WithMethod(HttpVerbs.Put).ShouldMapTo<SessionsController>(x => x.Update());
+        It should_map_put_update = () => "~/session".WithMethod(HttpVerbs.Put).ShouldMapTo<SessionsController>(x => x.Update()).WithName("update_session");
 
-        It should_map_delete_destroy = () => "~/session".WithMethod(HttpVerbs.Delete).ShouldMapTo<SessionsController>(x => x.Destroy());
+        It should_map_delete_destroy = () => "~/session".WithMethod(HttpVerbs.Delete).ShouldMapTo<SessionsController>(x => x.Destroy()).WithName("destroy_session");
 
 
         It should_generate_show = () => OutBoundUrl.Of<SessionsController>(x => x.Show()).ShouldMapToUrl("/session");
@@ -44,13 +47,13 @@ namespace RestfulRouting.Spec.Mappers
 
         It should_map_get_new = () => "~/session/avatar/new".WithMethod(HttpVerbs.Get).ShouldMapTo<AvatarsController>(x => x.New()).WithName("new_session_avatar");
 
-        It should_map_post_create = () => "~/session/avatar".WithMethod(HttpVerbs.Post).ShouldMapTo<AvatarsController>(x => x.Create());
+        It should_map_post_create = () => "~/session/avatar".WithMethod(HttpVerbs.Post).ShouldMapTo<AvatarsController>(x => x.Create()).WithName("create_session_avatar");
 
         It should_map_get_edit = () => "~/session/avatar/edit".WithMethod(HttpVerbs.Get).ShouldMapTo<AvatarsController>(x => x.Edit()).WithName("edit_session_avatar");
 
-        It should_map_put_update = () => "~/session/avatar".WithMethod(HttpVerbs.Put).ShouldMapTo<AvatarsController>(x => x.Update());
+        It should_map_put_update = () => "~/session/avatar".WithMethod(HttpVerbs.Put).ShouldMapTo<AvatarsController>(x => x.Update()).WithName("update_session_avatar");
 
-        It should_map_delete_destroy = () => "~/session/avatar".WithMethod(HttpVerbs.Delete).ShouldMapTo<AvatarsController>(x => x.Destroy());
+        It should_map_delete_destroy = () => "~/session/avatar".WithMethod(HttpVerbs.Delete).ShouldMapTo<AvatarsController>(x => x.Destroy()).WithName("destroy_session_avatar");
 
 
         It should_generate_show = () => OutBoundUrl.Of<AvatarsController>(x => x.Show()).ShouldMapToUrl("/session/avatar");
@@ -107,13 +110,13 @@ namespace RestfulRouting.Spec.Mappers
 
         It should_map_get_new = () => "~/signup".WithMethod(HttpVerbs.Get).ShouldMapTo<SessionsController>(x => x.New()).WithName("new_session");
 
-        It should_map_post_create = () => "~/session".WithMethod(HttpVerbs.Post).ShouldMapTo<SessionsController>(x => x.Create());
+        It should_map_post_create = () => "~/session".WithMethod(HttpVerbs.Post).ShouldMapTo<SessionsController>(x => x.Create()).WithName("create_session");
 
         It should_map_get_edit = () => "~/session/fancy/edit".WithMethod(HttpVerbs.Get).ShouldMapTo<SessionsController>(x => x.Edit()).WithName("edit_session");
 
-        It should_map_put_update = () => "~/session".WithMethod(HttpVerbs.Put).ShouldMapTo<SessionsController>(x => x.Update());
+        It should_map_put_update = () => "~/session".WithMethod(HttpVerbs.Put).ShouldMapTo<SessionsController>(x => x.Update()).WithName("update_session");
 
-        It should_map_delete_destroy = () => "~/session".WithMethod(HttpVerbs.Delete).ShouldMapTo<SessionsController>(x => x.Destroy());
+        It should_map_delete_destroy = () => "~/session".WithMethod(HttpVerbs.Delete).ShouldMapTo<SessionsController>(x => x.Destroy()).WithName("destroy_session");
 
         It should_generate_show = () => OutBoundUrl.Of<SessionsController>(x => x.Show()).ShouldMapToUrl("/session/something/else");
 
@@ -134,7 +137,7 @@ namespace RestfulRouting.Spec.Mappers
 
         Behaves_like<SessionsResource> a_sessions_resource;
 
-        It maps_get_hello = () => "~/session/hello".WithMethod(HttpVerbs.Get).ShouldMapTo<SessionsController>(x => x.Hello());
+        It maps_get_hello = () => "~/session/hello".WithMethod(HttpVerbs.Get).ShouldMapTo<SessionsController>(x => x.Hello()).WithName("hello_session");
     }
 
     public class mapping_nested_resource : base_context

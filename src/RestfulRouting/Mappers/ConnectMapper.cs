@@ -23,7 +23,8 @@ namespace RestfulRouting.Mappers
                 {
                     route.Url = Join(BasePath, _path, route.Url);
                 }
-                routeCollection.Add(route);
+
+                AppendRouteTo(routeCollection, route);
             }
         }
     }

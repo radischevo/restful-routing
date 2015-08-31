@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Linq;
+
 using RestfulRouting.Exceptions;
 
 namespace RestfulRouting.Mappers
@@ -31,12 +32,12 @@ namespace RestfulRouting.Mappers
             IncludedActions = new Dictionary<string, Func<Route>>(StringComparer.OrdinalIgnoreCase)
                                   {
                                       {Names.IndexName, () => GenerateNamedRoute(JoinResources(ResourceName), BuildPathFor(Paths.Index) , ControllerName, Names.IndexName, new[] { "GET" })},
-                                      {Names.CreateName, () => GenerateRoute(BuildPathFor(Paths.Create), ControllerName, Names.CreateName, new[] { "POST" })},
+                                      {Names.CreateName, () => GenerateNamedRoute("create_" + JoinResources(SingularResourceName), BuildPathFor(Paths.Create), ControllerName, Names.CreateName, new[] { "POST" })},
                                       {Names.NewName, () => GenerateNamedRoute("new_" + JoinResources(SingularResourceName), BuildPathFor(Paths.New), ControllerName, Names.NewName, new[] { "GET" })},
                                       {Names.EditName, () => GenerateNamedRoute("edit_" + JoinResources(SingularResourceName), BuildPathFor(Paths.Edit), ControllerName, Names.EditName, new[] { "GET" })},
                                       {Names.ShowName, () => GenerateNamedRoute(JoinResources(SingularResourceName), BuildPathFor(Paths.Show), ControllerName, Names.ShowName, new[] { "GET" })},
-                                      {Names.UpdateName, () => GenerateRoute(BuildPathFor(Paths.Update), ControllerName, Names.UpdateName, new[] { "PUT" })},
-                                      {Names.DestroyName, () => GenerateRoute(BuildPathFor(Paths.Destroy), ControllerName, Names.DestroyName, new[] { "DELETE" })}
+                                      {Names.UpdateName, () => GenerateNamedRoute("update_" + JoinResources(SingularResourceName), BuildPathFor(Paths.Update), ControllerName, Names.UpdateName, new[] { "POST" })},
+                                      {Names.DestroyName, () => GenerateNamedRoute("destroy_" + JoinResources(SingularResourceName), BuildPathFor(Paths.Destroy), ControllerName, Names.DestroyName, new[] { "DELETE" })}
                                   };
             if (RouteSet.MapDelete)
             {
@@ -62,7 +63,7 @@ namespace RestfulRouting.Mappers
             if (methods.Length == 0)
                 methods = new[] { HttpVerbs.Get };
 
-            return GenerateRoute(ResourcePath + "/{" + IdParameterName + "}/" + resource, ControllerName, action, methods.Select(x => x.ToString().ToUpperInvariant()).ToArray());
+            return GenerateNamedRoute(action + "_" + JoinResources(SingularResourceName), ResourcePath + "/{" + IdParameterName + "}/" + resource, ControllerName, action, methods.Select(x => x.ToString().ToUpperInvariant()).ToArray());
         }
 
         private Route CollectionRoute(string action, string resource, params HttpVerbs[] methods)
@@ -70,7 +71,7 @@ namespace RestfulRouting.Mappers
             if (methods.Length == 0)
                 methods = new[] { HttpVerbs.Get };
 
-            return GenerateRoute(ResourcePath + "/" + resource, ControllerName, action, methods.Select(x => x.ToString().ToUpperInvariant()).ToArray());
+            return GenerateNamedRoute(action + "_" + JoinResources(ResourceName), ResourcePath + "/" + resource, ControllerName, action, methods.Select(x => x.ToString().ToUpperInvariant()).ToArray());
         }
 
         public override void RegisterRoutes(RouteCollection routeCollection)
@@ -92,7 +93,7 @@ namespace RestfulRouting.Mappers
             foreach (var route in routes)
             {
                 ConfigureRoute(route);
-                routeCollection.Add(route);
+                AppendRouteTo(routeCollection, route);
             }
 
             if (Mappers.Any())
@@ -110,7 +111,5 @@ namespace RestfulRouting.Mappers
                 RegisterNested(routeCollection, mapper => mapper.SetParentResources(ResourcePaths));
             }
         }
-
-        
     }
 }

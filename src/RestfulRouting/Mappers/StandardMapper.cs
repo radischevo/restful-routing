@@ -8,9 +8,9 @@ namespace RestfulRouting.Mappers
 {
     public class StandardMapper : Mapper
     {
-        public Route Route;
+        public new Route Route;
 
-        public StandardMapper Path(string url)
+        public override StandardMapper Path(string url)
         {
             Route = new Route(url,
                 new RouteValueDictionary(),
@@ -82,12 +82,12 @@ namespace RestfulRouting.Mappers
         {
             Route.Url = Join(BasePath, Route.Url);
             Route.RouteHandler = RouteHandler;
-            
+
             if (Route.DataTokens == null)
                 Route.DataTokens = new RouteValueDictionary();
             Route.DataTokens["Namespaces"] = this.Namespaces;
-            
-            routeCollection.Add(Route);
+
+            AppendRouteTo(routeCollection, Route);
         }
     }
 }

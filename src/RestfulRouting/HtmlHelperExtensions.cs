@@ -7,12 +7,12 @@ namespace RestfulRouting
     {
         public static MvcHtmlString PutOverrideTag(this HtmlHelper html)
         {
-            return html.Hidden("_method", "put");
+            return html.Hidden("X-Http-Method-Override", "put");
         }
 
         public static MvcHtmlString DeleteOverrideTag(this HtmlHelper html)
         {
-            return html.Hidden("_method", "delete");
+            return html.Hidden("X-Http-Method-Override", "delete");
         }
     }
 }

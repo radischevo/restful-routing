@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Linq;
-using RestfulRouting.Mappers;
+
 using RestfulRouting.Exceptions;
-using System.Collections;
+using RestfulRouting.Mappers;
 
 namespace RestfulRouting
 {
@@ -23,6 +24,7 @@ namespace RestfulRouting
         StandardMapper Path(string path);
         void Connect<TRouteSet>(string path = "", string[] namespaces = null) where TRouteSet : RouteSet, new();
         void WithRouteHandler(IRouteHandler routeHandler);
+        void Token(string key, object value);
         void DebugRoute(string path);
     }
 
@@ -32,9 +34,10 @@ namespace RestfulRouting
         protected string BasePath;
         protected IRouteHandler RouteHandler = new MvcRouteHandler();
         protected RouteValueDictionary Constraints = new RouteValueDictionary();
+        protected RouteValueDictionary DataTokens = new RouteValueDictionary();
         protected List<string> ResourcePaths = new List<string>();
         protected string[] Namespaces;
-        
+
         public Mapper(string[] namespaces = null)
         {
             this.Namespaces = namespaces;
@@ -85,6 +88,11 @@ namespace RestfulRouting
             var mapper = new StandardMapper().Path(path);
             AddMapper(mapper);
             return mapper;
+        }
+
+        public void Token(string key, object value)
+        {
+            DataTokens[key] = value;
         }
 
         public virtual void Connect<TRouteSet>(string path = "", string[] namespaces = null) where TRouteSet : RouteSet, new()
@@ -202,6 +210,7 @@ map.Area<PostsController>(""posts"", posts =>
             mapper.SetBasePath(BasePath);
             mapper.WithRouteHandler(RouteHandler);
             mapper.InheritConstraints(Constraints);
+            mapper.InheritDataTokens(DataTokens);
             mapper.InheritNamespaces(Namespaces);
         }
 
@@ -212,6 +221,17 @@ map.Area<PostsController>(""posts"", posts =>
                 if (!Constraints.ContainsKey(constraint.Key))
                 {
                     Constraints[constraint.Key] = constraint.Value;
+                }
+            }
+        }
+
+        private void InheritDataTokens(RouteValueDictionary dataTokens)
+        {
+            foreach (var token in dataTokens)
+            {
+                if (!DataTokens.ContainsKey(token.Key))
+                {
+                    DataTokens[token.Key] = token.Value;
                 }
             }
         }
@@ -231,16 +251,22 @@ map.Area<PostsController>(""posts"", posts =>
         {
             if (route.Constraints == null)
                 route.Constraints = new RouteValueDictionary();
+
             foreach (var constraint in Constraints)
             {
                 route.Constraints[constraint.Key] = constraint.Value;
             }
-            
+
+            foreach (var token in DataTokens)
+            {
+                route.DataTokens[token.Key] = token.Value;
+            }
+
             if (this.Namespaces != null && this.Namespaces.Length > 0)
             {
                 if (route.DataTokens == null)
                     route.DataTokens = new RouteValueDictionary();
-                
+
                 route.DataTokens["Namespaces"] = this.Namespaces;
             }
         }
@@ -256,6 +282,19 @@ map.Area<PostsController>(""posts"", posts =>
             resources.AddRange(ResourcePaths);
             resources.Add(with);
             return string.Join("_", resources.Distinct().Select(r => r.ToLowerInvariant()));
+        }
+
+        protected void AppendRouteTo(RouteCollection routes, RouteBase route)
+        {
+            var namedRoute = (route as NamedRoute);
+            if (namedRoute == null || String.IsNullOrEmpty(namedRoute.Name))
+            {
+                routes.Add(route);
+            }
+            else
+            {
+                routes.Add(namedRoute.Name, namedRoute);
+            }
         }
     }
 }

@@ -38,8 +38,7 @@ namespace RestfulRouting.Mappers
             foreach (var route in routes.Select(x => (Route)x))
             {
                 ConstrainArea(route);
-                routeCollection.Add(route);
-                
+                AppendRouteTo(routeCollection, route);
             }
         }
 

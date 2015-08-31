@@ -20,13 +20,13 @@ namespace RestfulRouting.Spec.Mappers
 
         It should_map_get_new = () => "~/posts/new".WithMethod(HttpVerbs.Get).ShouldMapTo<PostsController>(x => x.New()).WithName("new_post");
 
-        It should_map_post_create = () => "~/posts".WithMethod(HttpVerbs.Post).ShouldMapTo<PostsController>(x => x.Create());
+        It should_map_post_create = () => "~/posts".WithMethod(HttpVerbs.Post).ShouldMapTo<PostsController>(x => x.Create()).WithName("create_post");
 
         It should_map_get_edit = () => "~/posts/1/edit".WithMethod(HttpVerbs.Get).ShouldMapTo<PostsController>(x => x.Edit(1)).WithName("edit_post");
 
-        It should_map_put_update = () => "~/posts/1".WithMethod(HttpVerbs.Put).ShouldMapTo<PostsController>(x => x.Update(1));
+        It should_map_put_update = () => "~/posts/1".WithMethod(HttpVerbs.Put).ShouldMapTo<PostsController>(x => x.Update(1)).WithName("update_post");
 
-        It should_map_delete_destroy = () => "~/posts/1".WithMethod(HttpVerbs.Delete).ShouldMapTo<PostsController>(x => x.Destroy(1));
+        It should_map_delete_destroy = () => "~/posts/1".WithMethod(HttpVerbs.Delete).ShouldMapTo<PostsController>(x => x.Destroy(1)).WithName("destroy_post");
 
         It should_generate_index = () => OutBoundUrl.Of<PostsController>(x => x.Index()).ShouldMapToUrl("/posts");
 
@@ -134,14 +134,14 @@ namespace RestfulRouting.Spec.Mappers
     {
         Because of = () => new ResourcesMapper<PostsController>(posts => posts.Collection(x => x.Get("latest"))).RegisterRoutes(routes);
 
-        It should_map_get_latest = () => "~/posts/latest".WithMethod(HttpVerbs.Get).ShouldMapTo<PostsController>(x => x.Latest());
+        It should_map_get_latest = () => "~/posts/latest".WithMethod(HttpVerbs.Get).ShouldMapTo<PostsController>(x => x.Latest()).WithName("latest_products");
     }
 
     public class mapping_resources_with_member_route : base_context
     {
         Because of = () => new ResourcesMapper<PostsController>(posts => posts.Member(x => x.Get("hello"))).RegisterRoutes(routes);
 
-        It should_map_get_hello = () => "~/posts/1/hello".WithMethod(HttpVerbs.Get).ShouldMapTo<PostsController>(x => x.Hello(1));
+        It should_map_get_hello = () => "~/posts/1/hello".WithMethod(HttpVerbs.Get).ShouldMapTo<PostsController>(x => x.Hello(1)).WithName("hello_product");
     }
 
     public class mapping_resources_with_except : base_context
